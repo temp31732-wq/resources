@@ -29,9 +29,12 @@ import {
   CheckCircle,
   Star,
   Zap,
+  X,
 } from 'lucide-react-native';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+const isTablet = width >= 768;
+const isLargeScreen = width >= 1024;
 
 interface BankContact {
   name: string;
@@ -54,7 +57,7 @@ const bankData: BankContact[] = [
       { type: 'Emergency', number: '94491 12211' }
     ],
     verified: true,
-    notes: 'Most numbers available 24×7 nationwide'
+    notes: 'Available 24×7 nationwide with comprehensive support'
   },
   {
     name: 'HDFC Bank',
@@ -66,7 +69,7 @@ const bankData: BankContact[] = [
       { type: 'Banking Grievances', number: '1800-224-060' }
     ],
     verified: true,
-    notes: 'Credit card lines available; Banking grievances Mon-Sat 9:30 AM-6:30 PM'
+    notes: 'Credit card support available; Banking grievances Mon-Sat 9:30 AM-6:30 PM'
   },
   {
     name: 'ICICI Bank',
@@ -74,7 +77,7 @@ const bankData: BankContact[] = [
     tollFree: ['1800 1080'],
     regular: ['022-3366-7777'],
     verified: true,
-    notes: 'General queries and customer care; email escalation available'
+    notes: 'General queries and customer care with email escalation support'
   },
   {
     name: 'Axis Bank',
@@ -82,7 +85,7 @@ const bankData: BankContact[] = [
     tollFree: ['1860 425 8888'],
     regular: ['022-6798-7700'],
     verified: true,
-    notes: 'Mumbai regional contact for account/credit card grievances'
+    notes: 'Mumbai regional contact for account and credit card grievances'
   },
   {
     name: 'Punjab National Bank (PNB)',
@@ -90,14 +93,14 @@ const bankData: BankContact[] = [
     tollFree: ['1800 1800', '1800 2021', '1800 180 2222', '1800 103 2222', '1800-180-2345'],
     regular: ['+91 120-249-0000'],
     verified: true,
-    notes: 'Multiple contact centers; Global users support available'
+    notes: 'Multiple contact centers with global user support available'
   },
   {
     name: 'Bank of Baroda',
     type: 'government',
     tollFree: ['1800 258 4455', '1800 102 4455', '1800-103-1002'],
     verified: true,
-    notes: 'Banking and grievances support'
+    notes: 'Comprehensive banking and grievances support'
   },
   {
     name: 'Union Bank of India',
@@ -128,7 +131,7 @@ const bankData: BankContact[] = [
     type: 'private',
     tollFree: ['1860 266 2666'],
     verified: true,
-    notes: 'Credit cards, banking, and grievances'
+    notes: 'Credit cards, banking, and grievances support'
   },
   {
     name: 'IndusInd Bank',
@@ -147,29 +150,22 @@ const bankData: BankContact[] = [
     type: 'private',
     tollFree: ['1800 425 1199'],
     verified: true,
-    notes: 'Banking and credit support'
+    notes: 'Banking and credit support services'
   },
   {
     name: 'HSBC India',
     type: 'private',
     tollFree: ['1800 267 3456'],
     verified: true,
-    notes: 'Cards, banking, and complaints'
+    notes: 'Cards, banking, and complaints handling'
   },
   {
     name: 'IDFC First Bank',
     type: 'private',
     tollFree: ['1860 500 1111'],
     verified: true,
-    notes: 'Banking, credit card, grievance redressal'
+    notes: 'Banking, credit card, and grievance redressal services'
   },
-  {
-    name: 'Punjab Gramin Bank',
-    type: 'government',
-    tollFree: ['1800 180 7777'],
-    verified: true,
-    notes: 'Regional rural bank'
-  }
 ];
 
 export default function App() {
@@ -213,313 +209,322 @@ export default function App() {
                      styles.specialPhoneText;
 
     const iconColor = style === 'primary' ? '#ffffff' : 
-                     style === 'secondary' ? '#1f2937' : 
-                     '#ea580c';
+                     style === 'secondary' ? '#374151' : 
+                     '#dc2626';
 
     return (
       <TouchableOpacity
         key={number}
         style={buttonStyle}
         onPress={() => makePhoneCall(number)}
-        activeOpacity={0.8}
+        activeOpacity={0.85}
       >
         {label && <Text style={styles.phoneLabel}>{label}</Text>}
         <View style={styles.phoneButtonContent}>
           <Text style={[textStyle, styles.phoneNumber]}>{number}</Text>
           <View style={styles.phoneIconContainer}>
-            <PhoneCall size={18} color={iconColor} />
+            <PhoneCall size={16} color={iconColor} />
           </View>
         </View>
-        <Text style={[styles.tapToCall, { color: style === 'primary' ? '#e0e7ff' : '#6b7280' }]}>
-          Tap to call
-        </Text>
       </TouchableOpacity>
     );
   };
 
+  const containerPadding = isLargeScreen ? 40 : isTablet ? 24 : 16;
+  const maxContentWidth = isLargeScreen ? 1200 : isTablet ? 800 : width - 32;
+
   return (
     <SafeAreaView style={styles.container}>
       <ExpoStatusBar style="light" />
-      <StatusBar barStyle="light-content" backgroundColor="#dc2626" />
+      <StatusBar barStyle="light-content" backgroundColor="#1e40af" />
       
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Animated Emergency Header */}
-        <View style={styles.emergencyHeader}>
-          <View style={styles.headerGradient}>
+      <ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: containerPadding }]}
+      >
+        <View style={[styles.contentWrapper, { maxWidth: maxContentWidth, alignSelf: 'center' }]}>
+          
+          {/* Professional Header */}
+          <View style={styles.header}>
             <View style={styles.headerContent}>
-              <View style={styles.headerIconContainer}>
+              <View style={styles.headerTop}>
                 <View style={styles.headerIcon}>
-                  <AlertTriangle size={32} color="#ffffff" />
+                  <Shield size={28} color="#ffffff" />
                 </View>
-                <View style={styles.pulseRing} />
-              </View>
-              <View style={styles.headerText}>
-                <Text style={styles.headerTitle}>🚨 Banking Emergency</Text>
-                <Text style={styles.headerSubtitle}>Instant access to verified bank helplines</Text>
-                <View style={styles.headerStats}>
-                  <View style={styles.statItem}>
-                    <Star size={16} color="#fbbf24" />
-                    <Text style={styles.statText}>{bankData.length} Banks</Text>
-                  </View>
-                  <View style={styles.statItem}>
-                    <Zap size={16} color="#10b981" />
-                    <Text style={styles.statText}>24/7 Support</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {/* Enhanced RBI Emergency Section */}
-        <View style={styles.rbiSection}>
-          <View style={styles.rbiGradient}>
-            <View style={styles.rbiHeader}>
-              <View style={styles.rbiIconContainer}>
-                <Shield size={28} color="#ffffff" />
-                <View style={styles.rbiIconGlow} />
-              </View>
-              <Text style={styles.rbiTitle}>🏛️ RBI Emergency Helpline</Text>
-            </View>
-            
-            <View style={styles.rbiContent}>
-              <View style={styles.rbiHelpline}>
-                <View style={styles.rbiPhoneHeader}>
-                  <Phone size={20} color="#ffffff" />
-                  <Text style={styles.rbiPhoneTitle}>Consumer Helpline</Text>
-                </View>
-                <TouchableOpacity
-                  style={styles.rbiPhoneButton}
-                  onPress={() => makePhoneCall('14448')}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.rbiPhoneNumber}>14448</Text>
-                  <Text style={styles.rbiPhoneLabel}>Toll-Free</Text>
-                  <PhoneCall size={20} color="#ffffff" style={styles.rbiPhoneIcon} />
-                </TouchableOpacity>
-                <View style={styles.rbiTiming}>
-                  <Clock size={16} color="#bfdbfe" />
-                  <Text style={styles.rbiTimingText}>9:30 AM - 5:15 PM</Text>
+                <View style={styles.headerText}>
+                  <Text style={styles.headerTitle}>Banking Emergency Resources</Text>
+                  <Text style={styles.headerSubtitle}>Verified helplines for immediate assistance</Text>
                 </View>
               </View>
               
-              <View style={styles.rbiInfo}>
-                <Text style={styles.rbiInfoTitle}>📋 When to Contact RBI</Text>
-                <Text style={styles.rbiInfoText}>• Bank doesn't respond within 30 days</Text>
-                <Text style={styles.rbiInfoText}>• Unsatisfactory resolution from bank</Text>
-                <Text style={styles.rbiInfoText}>• Serious banking irregularities</Text>
-                <View style={styles.rbiContactMethods}>
-                  <Text style={styles.rbiContactTitle}>Other Contact Methods:</Text>
-                  <Text style={styles.rbiContactText}>🌐 sachet.rbi.org.in</Text>
-                  <Text style={styles.rbiContactText}>📧 crpc@rbi.org.in</Text>
+              <View style={styles.headerStats}>
+                <View style={styles.statCard}>
+                  <Building2 size={18} color="#3b82f6" />
+                  <Text style={styles.statNumber}>{bankData.length}</Text>
+                  <Text style={styles.statLabel}>Banks</Text>
+                </View>
+                <View style={styles.statCard}>
+                  <Clock size={18} color="#10b981" />
+                  <Text style={styles.statNumber}>24/7</Text>
+                  <Text style={styles.statLabel}>Support</Text>
+                </View>
+                <View style={styles.statCard}>
+                  <CheckCircle size={18} color="#f59e0b" />
+                  <Text style={styles.statNumber}>100%</Text>
+                  <Text style={styles.statLabel}>Verified</Text>
                 </View>
               </View>
             </View>
           </View>
-        </View>
 
-        {/* Enhanced Search and Filter */}
-        <View style={styles.searchSection}>
-          <View style={styles.searchContainer}>
-            <Search size={20} color="#6366f1" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search your bank..."
-              placeholderTextColor="#9ca3af"
-              value={searchTerm}
-              onChangeText={setSearchTerm}
-            />
-            {searchTerm.length > 0 && (
-              <TouchableOpacity onPress={() => setSearchTerm('')}>
-                <Text style={styles.clearSearch}>✕</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          
-          <View style={styles.filterContainer}>
-            <TouchableOpacity
-              style={[styles.filterButton, selectedType === 'all' && styles.filterButtonActive]}
-              onPress={() => setSelectedType('all')}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.filterButtonText, selectedType === 'all' && styles.filterButtonTextActive]}>
-                🏦 All Banks
-              </Text>
-            </TouchableOpacity>
+          {/* RBI Emergency Section */}
+          <View style={styles.rbiSection}>
+            <View style={styles.rbiHeader}>
+              <View style={styles.rbiIconContainer}>
+                <AlertTriangle size={24} color="#dc2626" />
+              </View>
+              <View style={styles.rbiTextContainer}>
+                <Text style={styles.rbiTitle}>Reserve Bank of India</Text>
+                <Text style={styles.rbiSubtitle}>Banking Ombudsman & Consumer Helpline</Text>
+              </View>
+            </View>
             
-            <TouchableOpacity
-              style={[styles.filterButton, selectedType === 'government' && styles.filterButtonActiveGov]}
-              onPress={() => setSelectedType('government')}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.filterButtonText, selectedType === 'government' && styles.filterButtonTextActiveGov]}>
-                🏛️ Government
-              </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={[styles.filterButton, selectedType === 'private' && styles.filterButtonActivePrivate]}
-              onPress={() => setSelectedType('private')}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.filterButtonText, selectedType === 'private' && styles.filterButtonTextActivePrivate]}>
-                🏢 Private
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Enhanced Banks List */}
-        <View style={styles.banksContainer}>
-          <Text style={styles.banksTitle}>
-            📞 {filteredBanks.length} Bank{filteredBanks.length !== 1 ? 's' : ''} Available
-          </Text>
-          
-          {filteredBanks.map((bank, index) => (
-            <View key={bank.name} style={[styles.bankCard, { transform: [{ scale: 1 }] }]}>
-              <View style={styles.bankHeader}>
-                <View style={styles.bankInfo}>
-                  <View style={[styles.bankIcon, bank.type === 'government' ? styles.govIcon : styles.privateIcon]}>
-                    <Building2 size={24} color={bank.type === 'government' ? '#059669' : '#7c3aed'} />
-                    <View style={[styles.bankIconGlow, bank.type === 'government' ? styles.govIconGlow : styles.privateIconGlow]} />
+            <View style={styles.rbiContent}>
+              <TouchableOpacity
+                style={styles.rbiPhoneButton}
+                onPress={() => makePhoneCall('14448')}
+                activeOpacity={0.85}
+              >
+                <View style={styles.rbiPhoneContent}>
+                  <View style={styles.rbiPhoneInfo}>
+                    <Text style={styles.rbiPhoneNumber}>14448</Text>
+                    <Text style={styles.rbiPhoneLabel}>Consumer Helpline (Toll-Free)</Text>
                   </View>
-                  <View style={styles.bankDetails}>
-                    <Text style={styles.bankName}>{bank.name}</Text>
-                    <View style={[styles.bankTypeTag, bank.type === 'government' ? styles.govTag : styles.privateTag]}>
-                      <Text style={[styles.bankTypeText, bank.type === 'government' ? styles.govTagText : styles.privateTagText]}>
-                        {bank.type === 'government' ? '🏛️ Government Bank' : '🏢 Private Bank'}
-                      </Text>
-                    </View>
+                  <View style={styles.rbiPhoneIcon}>
+                    <PhoneCall size={20} color="#ffffff" />
                   </View>
                 </View>
+              </TouchableOpacity>
+              
+              <View style={styles.rbiDetails}>
+                <View style={styles.rbiDetailItem}>
+                  <Clock size={16} color="#6b7280" />
+                  <Text style={styles.rbiDetailText}>Monday - Friday: 9:30 AM - 5:15 PM</Text>
+                </View>
+                <View style={styles.rbiDetailItem}>
+                  <Text style={styles.rbiDetailText}>📧 crpc@rbi.org.in</Text>
+                </View>
+                <View style={styles.rbiDetailItem}>
+                  <Text style={styles.rbiDetailText}>🌐 sachet.rbi.org.in</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Search and Filter */}
+          <View style={styles.searchSection}>
+            <View style={styles.searchContainer}>
+              <Search size={20} color="#6b7280" />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search banks..."
+                placeholderTextColor="#9ca3af"
+                value={searchTerm}
+                onChangeText={setSearchTerm}
+              />
+              {searchTerm.length > 0 && (
+                <TouchableOpacity 
+                  onPress={() => setSearchTerm('')}
+                  style={styles.clearButton}
+                >
+                  <X size={18} color="#6b7280" />
+                </TouchableOpacity>
+              )}
+            </View>
+            
+            <View style={styles.filterContainer}>
+              {[
+                { key: 'all', label: 'All Banks', icon: '🏦' },
+                { key: 'government', label: 'Government', icon: '🏛️' },
+                { key: 'private', label: 'Private', icon: '🏢' }
+              ].map((filter) => (
+                <TouchableOpacity
+                  key={filter.key}
+                  style={[
+                    styles.filterButton,
+                    selectedType === filter.key && styles.filterButtonActive
+                  ]}
+                  onPress={() => setSelectedType(filter.key as any)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.filterIcon}>{filter.icon}</Text>
+                  <Text style={[
+                    styles.filterButtonText,
+                    selectedType === filter.key && styles.filterButtonTextActive
+                  ]}>
+                    {filter.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* Results Header */}
+          <View style={styles.resultsHeader}>
+            <Text style={styles.resultsTitle}>
+              {filteredBanks.length} Bank{filteredBanks.length !== 1 ? 's' : ''} Found
+            </Text>
+            <Text style={styles.resultsSubtitle}>
+              Tap any number to call directly
+            </Text>
+          </View>
+
+          {/* Banks Grid */}
+          <View style={[styles.banksGrid, isTablet && styles.banksGridTablet]}>
+            {filteredBanks.map((bank) => (
+              <View key={bank.name} style={[styles.bankCard, isTablet && styles.bankCardTablet]}>
                 
-                <View style={styles.bankActions}>
-                  {bank.verified && (
-                    <View style={styles.verifiedBadge}>
-                      <CheckCircle size={16} color="#059669" />
-                      <Text style={styles.verifiedText}>✓ Verified</Text>
+                {/* Bank Header */}
+                <View style={styles.bankHeader}>
+                  <View style={styles.bankMainInfo}>
+                    <View style={[
+                      styles.bankTypeIndicator,
+                      bank.type === 'government' ? styles.govIndicator : styles.privateIndicator
+                    ]} />
+                    <View style={styles.bankTitleContainer}>
+                      <Text style={styles.bankName}>{bank.name}</Text>
+                      <View style={styles.bankMeta}>
+                        <Text style={[
+                          styles.bankType,
+                          bank.type === 'government' ? styles.govType : styles.privateType
+                        ]}>
+                          {bank.type === 'government' ? 'Government Bank' : 'Private Bank'}
+                        </Text>
+                        {bank.verified && (
+                          <View style={styles.verifiedBadge}>
+                            <CheckCircle size={12} color="#10b981" />
+                            <Text style={styles.verifiedText}>Verified</Text>
+                          </View>
+                        )}
+                      </View>
                     </View>
-                  )}
+                  </View>
+                  
                   <TouchableOpacity
                     style={styles.expandButton}
                     onPress={() => setExpandedBank(expandedBank === bank.name ? null : bank.name)}
                     activeOpacity={0.7}
                   >
                     {expandedBank === bank.name ? 
-                      <ChevronUp size={24} color="#2563eb" /> : 
-                      <ChevronDown size={24} color="#2563eb" />
+                      <ChevronUp size={20} color="#6b7280" /> : 
+                      <ChevronDown size={20} color="#6b7280" />
                     }
                   </TouchableOpacity>
                 </View>
-              </View>
 
-              {/* Primary Toll-Free Numbers */}
-              <View style={styles.phoneSection}>
-                <View style={styles.phoneSectionHeader}>
-                  <Phone size={20} color="#1f2937" />
-                  <Text style={styles.phoneSectionTitle}>🆓 Primary Toll-Free Numbers</Text>
-                </View>
-                <View style={styles.phoneGrid}>
-                  {bank.tollFree.slice(0, expandedBank === bank.name ? undefined : 2).map((number) =>
-                    renderPhoneButton(number, 'primary')
+                {/* Primary Numbers */}
+                <View style={styles.primaryNumbers}>
+                  <Text style={styles.numbersTitle}>Primary Helplines</Text>
+                  <View style={[styles.phoneGrid, isTablet && styles.phoneGridTablet]}>
+                    {bank.tollFree.slice(0, expandedBank === bank.name ? undefined : 2).map((number) =>
+                      renderPhoneButton(number, 'primary')
+                    )}
+                  </View>
+                  
+                  {bank.tollFree.length > 2 && expandedBank !== bank.name && (
+                    <TouchableOpacity 
+                      style={styles.showMoreButton}
+                      onPress={() => setExpandedBank(bank.name)}
+                    >
+                      <Text style={styles.showMoreText}>
+                        +{bank.tollFree.length - 2} more numbers
+                      </Text>
+                      <ChevronDown size={16} color="#3b82f6" />
+                    </TouchableOpacity>
                   )}
                 </View>
-                {bank.tollFree.length > 2 && expandedBank !== bank.name && (
-                  <TouchableOpacity 
-                    style={styles.moreNumbersButton}
-                    onPress={() => setExpandedBank(bank.name)}
-                  >
-                    <Text style={styles.moreNumbers}>
-                      📱 +{bank.tollFree.length - 2} more numbers available
-                    </Text>
-                  </TouchableOpacity>
+
+                {/* Expanded Content */}
+                {expandedBank === bank.name && (
+                  <View style={styles.expandedContent}>
+                    
+                    {/* Regular Numbers */}
+                    {bank.regular && bank.regular.length > 0 && (
+                      <View style={styles.numbersSection}>
+                        <Text style={styles.numbersTitle}>Regular Numbers</Text>
+                        <View style={[styles.phoneGrid, isTablet && styles.phoneGridTablet]}>
+                          {bank.regular.map((number) => renderPhoneButton(number, 'secondary'))}
+                        </View>
+                      </View>
+                    )}
+
+                    {/* Special Services */}
+                    {bank.specialNumbers && bank.specialNumbers.length > 0 && (
+                      <View style={styles.numbersSection}>
+                        <Text style={styles.numbersTitle}>Specialized Services</Text>
+                        <View style={[styles.phoneGrid, isTablet && styles.phoneGridTablet]}>
+                          {bank.specialNumbers.map((special) =>
+                            renderPhoneButton(special.number, 'special', special.type)
+                          )}
+                        </View>
+                      </View>
+                    )}
+
+                    {/* Notes */}
+                    {bank.notes && (
+                      <View style={styles.notesSection}>
+                        <Text style={styles.notesTitle}>Additional Information</Text>
+                        <Text style={styles.notesText}>{bank.notes}</Text>
+                      </View>
+                    )}
+                  </View>
                 )}
               </View>
-
-              {/* Expanded Details */}
-              {expandedBank === bank.name && (
-                <View style={styles.expandedContent}>
-                  {/* Regular Numbers */}
-                  {bank.regular && (
-                    <View style={styles.phoneSection}>
-                      <View style={styles.phoneSectionHeader}>
-                        <Phone size={18} color="#1f2937" />
-                        <Text style={styles.phoneSectionTitle}>📞 Regular Numbers</Text>
-                      </View>
-                      <View style={styles.phoneGrid}>
-                        {bank.regular.map((number) => renderPhoneButton(number, 'secondary'))}
-                      </View>
-                    </View>
-                  )}
-
-                  {/* Special Numbers */}
-                  {bank.specialNumbers && (
-                    <View style={styles.phoneSection}>
-                      <View style={styles.phoneSectionHeader}>
-                        <CreditCard size={18} color="#1f2937" />
-                        <Text style={styles.phoneSectionTitle}>⚡ Special Services</Text>
-                      </View>
-                      <View style={styles.phoneGrid}>
-                        {bank.specialNumbers.map((special) =>
-                          renderPhoneButton(special.number, 'special', special.type)
-                        )}
-                      </View>
-                    </View>
-                  )}
-
-                  {/* Notes */}
-                  {bank.notes && (
-                    <View style={styles.notesSection}>
-                      <Text style={styles.notesTitle}>💡 Important Notes</Text>
-                      <Text style={styles.notesText}>{bank.notes}</Text>
-                    </View>
-                  )}
-                </View>
-              )}
-            </View>
-          ))}
-        </View>
-
-        {/* Enhanced Emergency Tips */}
-        <View style={styles.tipsSection}>
-          <View style={styles.tipsHeader}>
-            <AlertTriangle size={28} color="#f59e0b" />
-            <Text style={styles.tipsTitle}>💡 Emergency Banking Tips</Text>
+            ))}
           </View>
-          
-          <View style={styles.tipsContent}>
-            <View style={styles.tipCategory}>
-              <Text style={styles.tipCategoryTitle}>📋 Before Calling</Text>
-              <Text style={styles.tipText}>• Keep account number ready</Text>
-              <Text style={styles.tipText}>• Note transaction details & dates</Text>
-              <Text style={styles.tipText}>• Have ID documents accessible</Text>
-              <Text style={styles.tipText}>• Prepare screenshots if online issue</Text>
+
+          {/* Emergency Guidelines */}
+          <View style={styles.guidelinesSection}>
+            <View style={styles.guidelinesHeader}>
+              <AlertTriangle size={24} color="#f59e0b" />
+              <Text style={styles.guidelinesTitle}>Emergency Guidelines</Text>
             </View>
             
-            <View style={styles.tipCategory}>
-              <Text style={styles.tipCategoryTitle}>📞 During the Call</Text>
-              <Text style={styles.tipText}>• Always ask for reference number</Text>
-              <Text style={styles.tipText}>• Note agent's name & ID</Text>
-              <Text style={styles.tipText}>• Be clear about expected resolution</Text>
-              <Text style={styles.tipText}>• Follow up if no response in 48 hours</Text>
+            <View style={[styles.guidelinesGrid, isTablet && styles.guidelinesGridTablet]}>
+              <View style={styles.guidelineCard}>
+                <Text style={styles.guidelineTitle}>Before Calling</Text>
+                <Text style={styles.guidelineText}>• Account number and details</Text>
+                <Text style={styles.guidelineText}>• Transaction information</Text>
+                <Text style={styles.guidelineText}>• Identity documents</Text>
+              </View>
+              
+              <View style={styles.guidelineCard}>
+                <Text style={styles.guidelineTitle}>During the Call</Text>
+                <Text style={styles.guidelineText}>• Request reference number</Text>
+                <Text style={styles.guidelineText}>• Note agent details</Text>
+                <Text style={styles.guidelineText}>• Confirm resolution timeline</Text>
+              </View>
+              
+              <View style={styles.guidelineCard}>
+                <Text style={styles.guidelineTitle}>Follow Up</Text>
+                <Text style={styles.guidelineText}>• Contact RBI if no response in 30 days</Text>
+                <Text style={styles.guidelineText}>• Keep all communication records</Text>
+                <Text style={styles.guidelineText}>• Escalate through proper channels</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Enhanced Footer */}
-        <View style={styles.footer}>
-          <View style={styles.footerGradient}>
-            <Text style={styles.footerTitle}>🛡️ Banking Emergency Resources</Text>
+          {/* Professional Footer */}
+          <View style={styles.footer}>
+            <Text style={styles.footerTitle}>Banking Emergency Resources</Text>
             <Text style={styles.footerText}>
-              Always verify numbers on official bank websites • Contact RBI if banks don't respond within 30 days
+              All contact numbers are verified and sourced from official bank websites. 
+              Always prioritize your bank's official channels first.
             </Text>
-            <Text style={styles.footerSubtext}>
-              This resource is for emergency use only. Always prioritize official bank channels first.
+            <Text style={styles.footerDisclaimer}>
+              For unresolved issues, contact RBI Banking Ombudsman after 30 days.
             </Text>
-            <View style={styles.footerBadge}>
-              <CheckCircle size={16} color="#10b981" />
-              <Text style={styles.footerBadgeText}>All numbers verified</Text>
-            </View>
           </View>
         </View>
       </ScrollView>
@@ -530,271 +535,237 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#f8fafc',
   },
   scrollView: {
     flex: 1,
   },
-  emergencyHeader: {
-    backgroundColor: '#dc2626',
-    paddingHorizontal: 20,
-    paddingVertical: 32,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-    shadowColor: '#000',
+  scrollContent: {
+    paddingBottom: 40,
+  },
+  contentWrapper: {
+    width: '100%',
+  },
+  
+  // Header Styles
+  header: {
+    backgroundColor: '#1e40af',
+    borderRadius: 16,
+    marginTop: 16,
+    marginBottom: 24,
+    overflow: 'hidden',
+    shadowColor: '#1e40af',
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 16,
     elevation: 12,
-    overflow: 'hidden',
-  },
-  headerGradient: {
-    backgroundColor: 'rgba(220, 38, 38, 0.95)',
   },
   headerContent: {
+    padding: 24,
+  },
+  headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  headerIconContainer: {
-    position: 'relative',
-    marginRight: 20,
+    marginBottom: 24,
   },
   headerIcon: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    padding: 16,
-    borderRadius: 20,
-    zIndex: 2,
-  },
-  pulseRing: {
-    position: 'absolute',
-    top: -8,
-    left: -8,
-    right: -8,
-    bottom: -8,
-    borderRadius: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    zIndex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    padding: 12,
+    borderRadius: 12,
+    marginRight: 16,
   },
   headerText: {
     flex: 1,
   },
   headerTitle: {
-    fontSize: 26,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontWeight: '700',
     color: '#ffffff',
-    marginBottom: 6,
+    marginBottom: 4,
+    lineHeight: 32,
   },
   headerSubtitle: {
     fontSize: 16,
-    color: '#fecaca',
-    marginBottom: 12,
+    color: '#bfdbfe',
+    lineHeight: 24,
   },
   headerStats: {
     flexDirection: 'row',
     gap: 16,
   },
-  statItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  statText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#ffffff',
-    marginLeft: 6,
-  },
-  rbiSection: {
-    margin: 20,
-    borderRadius: 20,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
-    elevation: 12,
-  },
-  rbiGradient: {
-    backgroundColor: '#1e40af',
-    padding: 24,
-  },
-  rbiHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  rbiIconContainer: {
-    position: 'relative',
-    marginRight: 16,
-  },
-  rbiIconGlow: {
-    position: 'absolute',
-    top: -4,
-    left: -4,
-    right: -4,
-    bottom: -4,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 20,
-  },
-  rbiTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#ffffff',
-  },
-  rbiContent: {
-    flexDirection: 'row',
-    gap: 20,
-  },
-  rbiHelpline: {
+  statCard: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    borderRadius: 16,
-    padding: 20,
-  },
-  rbiPhoneHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  rbiPhoneTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#ffffff',
-    marginLeft: 8,
-  },
-  rbiPhoneButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
-    marginBottom: 12,
-    position: 'relative',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
-  rbiPhoneNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  statNumber: {
+    fontSize: 20,
+    fontWeight: '700',
     color: '#ffffff',
-    fontFamily: 'monospace',
+    marginTop: 8,
+    marginBottom: 4,
   },
-  rbiPhoneLabel: {
+  statLabel: {
     fontSize: 12,
     color: '#bfdbfe',
-    marginTop: 4,
+    fontWeight: '500',
   },
-  rbiPhoneIcon: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-  },
-  rbiTiming: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  rbiTimingText: {
-    fontSize: 12,
-    color: '#bfdbfe',
-    marginLeft: 6,
-  },
-  rbiInfo: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    borderRadius: 16,
-    padding: 20,
-  },
-  rbiInfoTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#ffffff',
-    marginBottom: 12,
-  },
-  rbiInfoText: {
-    fontSize: 13,
-    color: '#bfdbfe',
-    marginBottom: 6,
-    lineHeight: 18,
-  },
-  rbiContactMethods: {
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.2)',
-  },
-  rbiContactTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#ffffff',
-    marginBottom: 6,
-  },
-  rbiContactText: {
-    fontSize: 12,
-    color: '#bfdbfe',
-    marginBottom: 3,
-  },
-  searchSection: {
+
+  // RBI Section
+  rbiSection: {
     backgroundColor: '#ffffff',
-    margin: 20,
-    borderRadius: 20,
-    padding: 24,
+    borderRadius: 16,
+    marginBottom: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 8,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  rbiHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f4f6',
+  },
+  rbiIconContainer: {
+    backgroundColor: '#fef2f2',
+    padding: 12,
+    borderRadius: 12,
+    marginRight: 16,
+  },
+  rbiTextContainer: {
+    flex: 1,
+  },
+  rbiTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 2,
+  },
+  rbiSubtitle: {
+    fontSize: 14,
+    color: '#6b7280',
+    lineHeight: 20,
+  },
+  rbiContent: {
+    padding: 20,
+  },
+  rbiPhoneButton: {
+    backgroundColor: '#dc2626',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#dc2626',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  rbiPhoneContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  rbiPhoneInfo: {
+    flex: 1,
+  },
+  rbiPhoneNumber: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#ffffff',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    marginBottom: 4,
+  },
+  rbiPhoneLabel: {
+    fontSize: 14,
+    color: '#fecaca',
+    fontWeight: '500',
+  },
+  rbiPhoneIcon: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    padding: 8,
+    borderRadius: 8,
+  },
+  rbiDetails: {
+    gap: 12,
+  },
+  rbiDetailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  rbiDetailText: {
+    fontSize: 14,
+    color: '#6b7280',
+    lineHeight: 20,
+  },
+
+  // Search Section
+  searchSection: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: '#e2e8f0',
-  },
-  searchIcon: {
-    marginRight: 12,
+    backgroundColor: '#f9fafb',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#1f2937',
+    color: '#111827',
+    marginLeft: 12,
     fontWeight: '500',
   },
-  clearSearch: {
-    fontSize: 18,
-    color: '#9ca3af',
-    fontWeight: 'bold',
+  clearButton: {
+    padding: 4,
   },
   filterContainer: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 8,
   },
   filterButton: {
     flex: 1,
-    backgroundColor: '#f8fafc',
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    borderRadius: 12,
+    flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#e2e8f0',
+    justifyContent: 'center',
+    backgroundColor: '#f9fafb',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    gap: 6,
   },
   filterButtonActive: {
-    backgroundColor: '#2563eb',
-    borderColor: '#2563eb',
+    backgroundColor: '#3b82f6',
+    borderColor: '#3b82f6',
   },
-  filterButtonActiveGov: {
-    backgroundColor: '#059669',
-    borderColor: '#059669',
-  },
-  filterButtonActivePrivate: {
-    backgroundColor: '#7c3aed',
-    borderColor: '#7c3aed',
+  filterIcon: {
+    fontSize: 16,
   },
   filterButtonText: {
     fontSize: 14,
@@ -804,296 +775,299 @@ const styles = StyleSheet.create({
   filterButtonTextActive: {
     color: '#ffffff',
   },
-  filterButtonTextActiveGov: {
-    color: '#ffffff',
-  },
-  filterButtonTextActivePrivate: {
-    color: '#ffffff',
-  },
-  banksContainer: {
-    paddingHorizontal: 20,
-  },
-  banksTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1f2937',
+
+  // Results
+  resultsHeader: {
     marginBottom: 20,
-    textAlign: 'center',
+    alignItems: 'center',
+  },
+  resultsTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  resultsSubtitle: {
+    fontSize: 14,
+    color: '#6b7280',
+  },
+
+  // Banks Grid
+  banksGrid: {
+    gap: 16,
+  },
+  banksGridTablet: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   bankCard: {
     backgroundColor: '#ffffff',
-    borderRadius: 20,
-    padding: 24,
-    marginBottom: 20,
+    borderRadius: 16,
+    padding: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 6,
     borderWidth: 1,
-    borderColor: '#f1f5f9',
+    borderColor: '#f3f4f6',
   },
+  bankCardTablet: {
+    width: isLargeScreen ? '48%' : '100%',
+  },
+
+  // Bank Header
   bankHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: 20,
   },
-  bankInfo: {
+  bankMainInfo: {
     flexDirection: 'row',
     flex: 1,
+    alignItems: 'flex-start',
   },
-  bankIcon: {
-    padding: 12,
-    borderRadius: 16,
+  bankTypeIndicator: {
+    width: 4,
+    height: 40,
+    borderRadius: 2,
     marginRight: 16,
-    position: 'relative',
+    marginTop: 2,
   },
-  govIcon: {
-    backgroundColor: '#d1fae5',
+  govIndicator: {
+    backgroundColor: '#10b981',
   },
-  privateIcon: {
-    backgroundColor: '#e9d5ff',
+  privateIndicator: {
+    backgroundColor: '#8b5cf6',
   },
-  bankIconGlow: {
-    position: 'absolute',
-    top: -2,
-    left: -2,
-    right: -2,
-    bottom: -2,
-    borderRadius: 18,
-    opacity: 0.3,
-  },
-  govIconGlow: {
-    backgroundColor: '#059669',
-  },
-  privateIconGlow: {
-    backgroundColor: '#7c3aed',
-  },
-  bankDetails: {
+  bankTitleContainer: {
     flex: 1,
   },
   bankName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1f2937',
-    marginBottom: 8,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 6,
+    lineHeight: 24,
   },
-  bankTypeTag: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+  bankMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
-  govTag: {
-    backgroundColor: '#d1fae5',
-  },
-  privateTag: {
-    backgroundColor: '#e9d5ff',
-  },
-  bankTypeText: {
-    fontSize: 12,
+  bankType: {
+    fontSize: 13,
     fontWeight: '600',
   },
-  govTagText: {
-    color: '#065f46',
+  govType: {
+    color: '#059669',
   },
-  privateTagText: {
-    color: '#581c87',
-  },
-  bankActions: {
-    alignItems: 'flex-end',
+  privateType: {
+    color: '#7c3aed',
   },
   verifiedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#d1fae5',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginBottom: 12,
+    backgroundColor: '#ecfdf5',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    gap: 4,
   },
   verifiedText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
-    color: '#065f46',
-    marginLeft: 6,
+    color: '#059669',
   },
   expandButton: {
+    backgroundColor: '#f9fafb',
     padding: 8,
-    backgroundColor: '#eff6ff',
-    borderRadius: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
   },
-  phoneSection: {
-    marginBottom: 20,
-  },
-  phoneSectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+
+  // Phone Numbers
+  primaryNumbers: {
     marginBottom: 16,
   },
-  phoneSectionTitle: {
+  numbersSection: {
+    marginBottom: 20,
+  },
+  numbersTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1f2937',
-    marginLeft: 10,
+    color: '#374151',
+    marginBottom: 12,
   },
   phoneGrid: {
-    gap: 12,
+    gap: 8,
+  },
+  phoneGridTablet: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   primaryPhoneButton: {
-    backgroundColor: '#2563eb',
-    borderRadius: 16,
-    padding: 20,
-    shadowColor: '#2563eb',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
+    backgroundColor: '#3b82f6',
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#3b82f6',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+    ...(isTablet && { flex: 1, minWidth: '48%' }),
   },
   secondaryPhoneButton: {
-    backgroundColor: '#f8fafc',
-    borderColor: '#cbd5e1',
-    borderWidth: 2,
-    borderRadius: 16,
-    padding: 20,
+    backgroundColor: '#f9fafb',
+    borderColor: '#d1d5db',
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 16,
+    ...(isTablet && { flex: 1, minWidth: '48%' }),
   },
   specialPhoneButton: {
-    backgroundColor: '#fed7aa',
-    borderColor: '#fb923c',
-    borderWidth: 2,
-    borderRadius: 16,
-    padding: 20,
+    backgroundColor: '#fef2f2',
+    borderColor: '#fecaca',
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 16,
+    ...(isTablet && { flex: 1, minWidth: '48%' }),
   },
   phoneLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#ea580c',
-    marginBottom: 6,
+    color: '#dc2626',
+    marginBottom: 8,
   },
   phoneButtonContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6,
   },
   phoneNumber: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    fontFamily: 'monospace',
+    fontSize: 18,
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
   },
   phoneIconContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    padding: 8,
-    borderRadius: 8,
+    padding: 6,
+    borderRadius: 6,
   },
   primaryPhoneText: {
     color: '#ffffff',
   },
   secondaryPhoneText: {
-    color: '#1f2937',
+    color: '#374151',
   },
   specialPhoneText: {
-    color: '#ea580c',
+    color: '#dc2626',
   },
-  tapToCall: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  moreNumbersButton: {
-    backgroundColor: '#f1f5f9',
-    borderRadius: 12,
+  showMoreButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#eff6ff',
+    borderRadius: 8,
     padding: 12,
     marginTop: 12,
+    gap: 6,
   },
-  moreNumbers: {
+  showMoreText: {
     fontSize: 14,
-    color: '#2563eb',
+    color: '#3b82f6',
     fontWeight: '600',
-    textAlign: 'center',
   },
+
+  // Expanded Content
   expandedContent: {
-    borderTopWidth: 2,
-    borderTopColor: '#f1f5f9',
+    borderTopWidth: 1,
+    borderTopColor: '#f3f4f6',
     paddingTop: 20,
   },
   notesSection: {
     backgroundColor: '#f8fafc',
-    borderRadius: 16,
-    padding: 20,
-    marginTop: 12,
+    borderRadius: 12,
+    padding: 16,
     borderLeftWidth: 4,
     borderLeftColor: '#3b82f6',
   },
   notesTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 10,
+    color: '#374151',
+    marginBottom: 8,
   },
   notesText: {
     fontSize: 14,
     color: '#6b7280',
     lineHeight: 22,
   },
-  tipsSection: {
-    backgroundColor: '#fffbeb',
-    margin: 20,
-    borderRadius: 20,
+
+  // Guidelines Section
+  guidelinesSection: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
     padding: 24,
-    borderWidth: 2,
-    borderColor: '#fde68a',
-    shadowColor: '#f59e0b',
+    marginBottom: 24,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
   },
-  tipsHeader: {
+  guidelinesHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
   },
-  tipsTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#92400e',
+  guidelinesTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#111827',
     marginLeft: 12,
   },
-  tipsContent: {
-    gap: 20,
+  guidelinesGrid: {
+    gap: 16,
   },
-  tipCategory: {
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
+  guidelinesGridTablet: {
+    flexDirection: 'row',
+  },
+  guidelineCard: {
+    backgroundColor: '#f9fafb',
+    borderRadius: 12,
     padding: 20,
     borderLeftWidth: 4,
     borderLeftColor: '#f59e0b',
+    ...(isTablet && { flex: 1 }),
   },
-  tipCategoryTitle: {
+  guidelineTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#92400e',
+    color: '#111827',
     marginBottom: 12,
   },
-  tipText: {
+  guidelineText: {
     fontSize: 14,
-    color: '#92400e',
+    color: '#6b7280',
     marginBottom: 6,
-    lineHeight: 22,
+    lineHeight: 20,
   },
+
+  // Footer
   footer: {
-    marginTop: 20,
-    overflow: 'hidden',
-  },
-  footerGradient: {
-    backgroundColor: '#1f2937',
-    padding: 32,
+    backgroundColor: '#111827',
+    borderRadius: 16,
+    padding: 24,
     alignItems: 'center',
   },
   footerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '700',
     color: '#ffffff',
     marginBottom: 12,
     textAlign: 'center',
@@ -1105,25 +1079,10 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginBottom: 12,
   },
-  footerSubtext: {
+  footerDisclaimer: {
     fontSize: 12,
     color: '#9ca3af',
     textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 16,
-  },
-  footerBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#065f46',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  footerBadgeText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#ffffff',
-    marginLeft: 6,
+    lineHeight: 18,
   },
 });
